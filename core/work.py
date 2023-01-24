@@ -23,8 +23,8 @@ def moving_average(data, period):
 
 def binance_bot(request):
     # Define the API key and secret
-    api_key = ''
-    secret = ''
+    api_key = 'bu7Ffd6JnugsmTULzg1xZdNEc5yri5lnLHVFunFgRXR7offJYYFsPDO9shs1OWgC'
+    secret = 'qwYqS6opzZqmM06l7hqkX3tTcEJeQ6kFSAKtjbPKjYIygXfXsO69pBMz5WHpg7Xk'
 
     # Initialize the Binance exchange object
     exchange = ccxt.binance({
@@ -45,17 +45,17 @@ def binance_bot(request):
     # Fetch historical data for the last 100 candles And save to the database
     ohlcv = exchange.fetch_ohlcv(symbol, timeframe)
 
-    # if not ohlcv:
-    #     print("The list is empty, check the symbol and timeframe or the connection to the API")
-    # else:
-    #     for candle in ohlcv:
-    #         timestamp, open, high, low, close, volume = candle
-    #          # Convert timestamp from UNIX timestamp to Python datetime object
-    #         timestamp = datetime.datetime.fromtimestamp(timestamp / 1000)
-    #         date = datetime.datetime.now().date()
-    #         time = datetime.datetime.now().time()
-    #         ohlcv_data, created = HistoricalData.objects.update_or_create(timestamp=timestamp, defaults={'symbol': symbol, 'open': open, 'high': high, 'low': low, 'close': close, 'volume': volume})
-    #         ohlcv_data.save()
+    if not ohlcv:
+        print("The list is empty, check the symbol and timeframe or the connection to the API")
+    else:
+        for candle in ohlcv:
+            timestamp, open, high, low, close, volume = candle
+             # Convert timestamp from UNIX timestamp to Python datetime object
+            timestamp = datetime.datetime.fromtimestamp(timestamp / 1000)
+            date = datetime.datetime.now().date()
+            time = datetime.datetime.now().time()
+            ohlcv_data, created = HistoricalData.objects.update_or_create(timestamp=timestamp, defaults={'symbol': symbol, 'open': open, 'high': high, 'low': low, 'close': close, 'volume': volume})
+            ohlcv_data.save()
 
     url = "https://cointelegraph.com/tags/bitcoin"
     html = requests.get(url).text
@@ -100,7 +100,7 @@ def binance_bot(request):
         sentiment = "negative"
 
 
-    balance = []
+    balance = 1000
 
     # Use the sentiment analysis results to determine if the sentiment is positive, negative, or neutral
     if sentiment == "positive":
@@ -113,8 +113,8 @@ def binance_bot(request):
         print("Sentiment is Neutral")
 
     # Create an instance of the BinanceBot model and save it to the database
-    # bot = BinanceBot(balance=balance)
-    # bot.save()
+    bot = BinanceBot(balance=balance)
+    bot.save()
 
     # Pass the bot's balance to the template
     context = {'balance': balance}

@@ -5,9 +5,7 @@ from django.db import models
 class BinanceBot(models.Model):
     balance = models.FloatField()
     trades = models.IntegerField()
-    date_created = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return f"{self.createdAt.strftime('%d-%m-%Y')}"
+    date_created = models.DateTimeField(null=True, auto_now_add=True)
 
 
 class HistoricalData(models.Model):
@@ -22,7 +20,9 @@ class HistoricalData(models.Model):
     time = models.TimeField()
 
     def __str__(self):
-        return f"{self.createdAt.strftime('%d-%m-%Y')}"
+        return self.symbol
+
+    
 
 class CryptoAsset(models.Model):
     symbol = models.CharField(max_length=20)
